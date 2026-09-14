@@ -124,7 +124,7 @@ tbody tr:hover {
     width: 4rem;
 }
 
-.bnt-add {
+.btn-add {
     background-color: rgb(0, 67, 211);
     margin-left: 1rem;
 }
@@ -206,4 +206,17 @@ transition: all 0.3s ease;
 .textbox input:focus + .txtbox-label::after,
 .textbox input:valid + .txtbox-label::after{
     transform: translateX(0%);
+}
+
+
+.display-none{
+    display: none;
+}
+
+.default-text .txtbox-label{
+    border-bottom: 0px;
+}
+
+.placeholder span {
+    color:#545353;
 }
