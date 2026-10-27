@@ -1,16 +1,16 @@
 let students = [];
 let formMode = "Add";
 let selectedStudentID = -1;
-const baseURL = "http://192.168.100.160/student-info/tae/assets/php/student.php";
+const baseURL = " https://studentinfoapi-c574.onrender.com/api/students";
 
 const $tbody = $("#student-data");
+const $studentSearch = $("#student-search");
 
 const $addBtn = $("#add-btn");
 const $editBtn = $("#edit-btn");
 const $deleteBtn = $("#delete-btn");
 const $saveBtn = $("#save-btn");
 const $cancelBtn = $("#cancel-btn");    
-
 const $txtLastname = $("#txt-lastname");
 const $txtFirstname = $("#txt-firstname");
 const $txtMiddlename = $("#txt-middlename");
@@ -32,6 +32,10 @@ $(document).ready(function () {
   fetchStudentData();
   fetchAcadLevelData();
   fetchSectionData();
+});
+
+$studentSearch.on("input", function () {
+  renderStudents($(this).val());
 });
 
 $addBtn.on("click", function () {
@@ -89,10 +93,12 @@ $saveBtn.on("click", function () {
       firstname: $txtFirstname.val(),
       middlename: $txtMiddlename.val(),
       gender: $txtGender.val(),
-      acadlevel_id: $txtYearLevel.val(),
-      section_id: $txtSection.val(),
+      acadlevelid: $txtYearLevel.val(),
+      sectionid: $txtSection.val(),
       email: $txtEmail.val(),
     };
+
+    console.log(student);
 
     addStudent(student)
       .done(function (response) {
@@ -165,9 +171,31 @@ function resetForm() {
   resetInputFields();
 }
 
-function renderStudents() {
+function renderStudents(searchTerm = "") {
   $tbody.empty();
-  students.forEach(function (student) {
+  const normalizedSearch = searchTerm.trim().toLocaleLowerCase();
+  const filteredStudents = students.filter(function (student) {
+    const searchableValues = [
+      student.lastname,
+      student.firstname,
+      student.middlename,
+      student.gender,
+      student.acadlevel,
+      student.section,
+      student.email,
+    ];
+
+    return searchableValues.some(function (value) {
+      return String(value).toLocaleLowerCase().includes(normalizedSearch);
+    });
+  });
+
+  if (filteredStudents.length === 0) {
+    showTableMessage("No students match your search.");
+    return;
+  }
+
+  filteredStudents.forEach(function (student) {
     const $row = $("<tr></tr>");
     $("<td></td>").text(student.lastname).appendTo($row);
     $("<td></td>").text(student.firstname).appendTo($row);
@@ -526,3 +554,5 @@ function deleteStudent(studentId) {
     dataType: "json",
   });
 }
+
+
