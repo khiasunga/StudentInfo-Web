@@ -1,6 +1,6 @@
 services:
   - type: web
     name: studentinfo-web
-    runtime: static
-    buildCommand: mkdir -p public/assets && cp Index.html public/index.html && cp -R assets/css assets/js public/assets/
-    staticPublishPath: ./public
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
